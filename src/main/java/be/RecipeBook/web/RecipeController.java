@@ -1,6 +1,7 @@
 package be.RecipeBook.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import be.RecipeBook.domain.AppUserRepository;
 import be.RecipeBook.domain.CategoryRepository;
 import be.RecipeBook.domain.Recipe;
 import be.RecipeBook.domain.RecipeRepository;
@@ -22,9 +24,16 @@ public class RecipeController {
 	@Autowired
 	private CategoryRepository cRepository;
 	
+	@Autowired AppUserRepository uRepository;
+	
 	@GetMapping("index")
 	public String index() {
 		return "index";
+	}
+	
+	@GetMapping("login")
+	public String login() {
+		return "login";
 	}
 	
 	@GetMapping("recipelist")
@@ -33,6 +42,7 @@ public class RecipeController {
 		return "recipelist";
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("add")
 	public String addRecipe(Model model) {
 		model.addAttribute("recipe", new Recipe());
@@ -40,6 +50,7 @@ public class RecipeController {
 		return "addrecipe";
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("save")
 	public String save(@Valid Recipe recipe, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
@@ -52,16 +63,30 @@ public class RecipeController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("delete/{id}")
 	public String deleteRecipe(@PathVariable("id") Long id, Model model) {
 		rRepository.deleteById(id);
 		return "redirect:../recipelist";
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("edit/{id}")
 	public String editRecipe(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("recipe", rRepository.findById(id));
 		model.addAttribute("categories", cRepository.findAll());
 		return "editrecipe";
+	}
+	
+	@GetMapping("recipe/{id}")
+	public String showRecipe(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("recipe", rRepository.findById(id));
+		return "recipe";
+	}
+	
+	@GetMapping("favorites/{id}")
+	public String showFavorites(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("user", uRepository.findById(id));
+		return "favorites";
 	}
 }

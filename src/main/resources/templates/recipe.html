@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Recipe Book</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
+	th:href="@{/css/bootstrap.min.css}" />
+</head>
+
+<body>
+	<div class="container" th:object="${recipe}">
+	<h2 th:text="*{{name}}"></h2>
+	<p th:text="*{{category.name}}"></p>
+	<h4>Ingredients</h4>
+	<p th:text="*{{ingredients}}"></p>
+	<h4>Instructions</h4>
+	<p th:text="*{{instructions}}"></p>
+	</div>
+</body>

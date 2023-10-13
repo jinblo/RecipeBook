@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -14,15 +15,16 @@ public class Recipe {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@NotNull
 	@Size(min=3, max=100)
 	private String name;
 	@Size(min=3)
 	private String ingredients;
-	@Size(min=30)
+	@Size(min=30, message="lenght must be over 30")
 	private String instructions;
 	
 	@ManyToOne
-	@JoinColumn(name="categoryId")
+	@JoinColumn(name="categoryid")
 	private Category category;
 
 	public Recipe() {}

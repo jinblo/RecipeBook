@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
-<title>Reseptikansio</title>
+<title>Recipe Book</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
 </head>
 
 <body>
 	<div class="container">
-		<h1>Reseptikansio</h1>
+		<h1>Recipe Book</h1>
+		<form th:action="@{/logout}" method="post">
+			<h6>Current user: <span sec:authentication="name"></span>
+			<input type="submit" value="Logout" class="btn btn-secondary"/>
+		</h6>
+		</form>
 		<table class="table table-striped">
 			<tr>
-				<th>Resepti</th>
-				<th>Kategoria</th>
+				<th>Recipe</th>
+				<th>Category</th>
+				<th sec:authorize="hasAuthority('ADMIN')"></th>
+				<th sec:authorize="hasAuthority('ADMIN')"></th>
 			</tr>
 			<tr th:each="recipe : ${recipes}">
-				<td th:text="${recipe.name}"></td>
+				<td><a th:href="@{recipe/{id}(id=${recipe.id})}"><span th:text="${recipe.name}"></span></a></td>
 				<td th:text="${recipe?.category?.name}?:''"></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{edit/{id}(id=${recipe.id})}" class="btn btn-warning">Edit</a></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{delete/{id}(id=${recipe.id})}" class="btn btn-danger">Delete</a></td>
 			</tr>
 		</table>
-		<a href="/add" class="btn btn-success">Lisää uusi resepti</a>
-
+		<a sec:authorize="hasAuthority('ADMIN')" href="/add" class="btn btn-success">New Recipe</a>
 	</div>
 </body>
 

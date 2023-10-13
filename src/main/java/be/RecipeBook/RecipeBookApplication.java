@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import be.RecipeBook.domain.AppUser;
+import be.RecipeBook.domain.AppUserRepository;
 import be.RecipeBook.domain.Category;
 import be.RecipeBook.domain.CategoryRepository;
 import be.RecipeBook.domain.Recipe;
@@ -23,7 +25,7 @@ public class RecipeBookApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demoData(RecipeRepository rRepository, CategoryRepository cRepository) {
+	public CommandLineRunner demoData(RecipeRepository rRepository, CategoryRepository cRepository, AppUserRepository uRepository) {
 		return (args) -> {
 			cRepository.save(new Category("Alkuruoka"));
 			cRepository.save(new Category("Pääruoka"));
@@ -39,7 +41,9 @@ public class RecipeBookApplication {
 			for (Recipe recipe : rRepository.findAll()) {
 				log.info(recipe.toString());
 			}
-			
+	
+			uRepository.save(new AppUser("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER"));
+			uRepository.save(new AppUser("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN"));
 
 		};
 	}

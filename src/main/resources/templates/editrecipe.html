@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Recipes - Edit</title>
+<title>Recipe Book - Edit</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
 	th:href="@{/css/bootstrap.min.css}" />
@@ -11,29 +11,29 @@
 
 <body>
 	<div class="container">
-		<h1>Muokkaa reseptiä</h1>
+		<h1>Edit a Recipe</h1>
 		<div>
 			<form th:object="${recipe}" th:action="@{~/save}" method="post">
 				<input type="hidden" id="id" th:field="*{id}">
 				<div class="form-group">
-					<label for="name">Nimi</label> <input type="text" id="name"
+					<label for="name">Name</label> <input type="text" id="name"
 						th:field="*{name}" class="form-control">
 					<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
 				</div>
 				<div class="form-group">
-					<label for="ingredients">Ainekset</label> <input type="text"
+					<label for="ingredients">Ingredients</label> <input type="text"
 						id="ingredients" th:field="*{ingredients}" class="form-control">
 					<div th:if="${#fields.hasErrors('ingredients')}"
 						th:errors="*{ingredients}">Error</div>
 				</div>
 				<div class="form-group">
-					<label for="instructions">Ohjeet</label> <input type="text"
+					<label for="instructions">Instructions</label> <input type="text"
 						id="instructions" th:field="*{instructions}" class="form-control">
 					<div th:if="${#fields.hasErrors('instructions')}"
 						th:errors="*{instructions}">Error</div>
 				</div>
 				<div class="form-group">
-					<label for="categories">Kategoria</label> <select id="categories"
+					<label for="categories">Category</label> <select id="categories"
 						th:field="*{category}" class="form-control">
 						<option th:each="category: ${categories}"
 							th:value="${category.id}" th:text="${category.name}"></option>
