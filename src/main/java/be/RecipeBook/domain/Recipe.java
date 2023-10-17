@@ -1,10 +1,16 @@
 package be.RecipeBook.domain;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,6 +32,10 @@ public class Recipe {
 	@ManyToOne
 	@JoinColumn(name="categoryid")
 	private Category category;
+	
+	@JsonIgnore
+	@ManyToMany(cascade=CascadeType.ALL, mappedBy="likedRecipes")
+	private Set<AppUser> likes;
 
 	public Recipe() {}
 
@@ -80,6 +90,14 @@ public class Recipe {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public Set<AppUser> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<AppUser> likes) {
+		this.likes = likes;
 	}
 
 	@Override

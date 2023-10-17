@@ -4,7 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
-<title>Recipe Book</title>
+<title>Recipe Book - Favourites</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
 	th:href="@{/css/bootstrap.min.css}" />
@@ -18,28 +18,18 @@
 					type="submit" value="Logout" class="btn btn-secondary" />
 			</h6>
 		</form>
-		<h1>Recipe Book</h1>
-		<a th:href="@{favourites/{id}(id=1)}" class="btn btn-info">Favourites</a>
+		<h2>Favourite recipes</h2>
 		<table class="table table-striped">
 			<tr>
 				<th>Recipe</th>
 				<th>Category</th>
-				<th sec:authorize="hasAuthority('ADMIN')"></th>
-				<th sec:authorize="hasAuthority('ADMIN')"></th>
+
 			</tr>
-			<tr th:each="recipe : ${recipes}">
-				<td><a th:href="@{recipe/{id}(id=${recipe.id})}"><span
+			<tr th:each="recipe : ${likedRecipes}">
+				<td><a th:href="@{~/recipe/{id}(id=${recipe.id})}"><span
 						th:text="${recipe.name}"></span></a></td>
 				<td th:text="${recipe?.category?.name}?:''"></td>
-				<td sec:authorize="hasAuthority('ADMIN')"><a
-					th:href="@{edit/{id}(id=${recipe.id})}" class="btn btn-warning">Edit</a></td>
-				<td sec:authorize="hasAuthority('ADMIN')"><a
-					th:href="@{delete/{id}(id=${recipe.id})}" class="btn btn-danger">Delete</a></td>
 			</tr>
 		</table>
-		<a sec:authorize="hasAuthority('ADMIN')" href="/add"
-			class="btn btn-success">New Recipe</a>
 	</div>
 </body>
-
-</html>

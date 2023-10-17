@@ -1,5 +1,7 @@
 package be.RecipeBook.web;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import be.RecipeBook.domain.AppUser;
 import be.RecipeBook.domain.AppUserRepository;
 import be.RecipeBook.domain.CategoryRepository;
 import be.RecipeBook.domain.Recipe;
@@ -24,7 +27,8 @@ public class RecipeController {
 	@Autowired
 	private CategoryRepository cRepository;
 	
-	@Autowired AppUserRepository uRepository;
+	@Autowired 
+	private AppUserRepository uRepository;
 	
 	@GetMapping("index")
 	public String index() {
@@ -81,12 +85,23 @@ public class RecipeController {
 	@GetMapping("recipe/{id}")
 	public String showRecipe(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("recipe", rRepository.findById(id));
+		model.addAttribute("user", uRepository.findById((long) 1));
 		return "recipe";
 	}
 	
-	@GetMapping("favorites/{id}")
+	@GetMapping("favourites/{id}")
 	public String showFavorites(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("user", uRepository.findById(id));
-		return "favorites";
+		Optional<AppUser> appUser = uRepository.findById(id);
+		model.addAttribute("likedRecipes", appUser.get().getLikedRecipes());
+		model.addAttribute("user", appUser);
+		return "favourites";
+	}
+	
+	@PostMapping("addfavourite/{username}")
+	public String addFavourite(@PathVariable("username") String username, Recipe recipe) {
+		AppUser appUser = uRepository.findByUsername(username);
+		appUser.getLikedRecipes().add(recipe);
+		uRepository.save(appUser);
+		return "favourites";
 	}
 }

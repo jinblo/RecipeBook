@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
-
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
 <title>Recipe Book</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -11,11 +11,27 @@
 
 <body>
 	<div class="container" th:object="${recipe}">
-	<h2 th:text="*{{name}}"></h2>
-	<p th:text="*{{category.name}}"></p>
-	<h4>Ingredients</h4>
-	<p th:text="*{{ingredients}}"></p>
-	<h4>Instructions</h4>
-	<p th:text="*{{instructions}}"></p>
+		<form th:action="@{/logout}" method="post">
+			<h6>
+				Current user: <span sec:authentication="name"></span> <input
+					type="submit" value="Logout" class="btn btn-secondary" />
+			</h6>
+		</form>
+		<h2 th:text="*{{name}}"></h2>
+		<form th:object="${recipe}"
+			th:action="@{/addfavourite/{username}(username=${#authentication.name})}"
+			method="post">
+			<input type="hidden" id="id" th:field="*{id}"> <input
+				type="hidden" id="name" th:field="*{name}"> <input
+				type="hidden" id="ingredients" th:field="*{ingredients}"> <input
+				type="hidden" id="instructions" th:field="*{instructions}">
+			<input type="text" id="category" th:field="*{category}"> <input
+				type="submit" value="Add to Favourites" class="btn btn-info" />
+		</form>
+		<p th:text="*{{category.name}}"></p>
+		<h4>Ingredients</h4>
+		<p th:text="*{{ingredients}}"></p>
+		<h4>Instructions</h4>
+		<p th:text="*{{instructions}}"></p>
 	</div>
 </body>

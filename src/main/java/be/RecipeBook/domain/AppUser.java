@@ -1,15 +1,21 @@
 package be.RecipeBook.domain;
 
+import java.util.Set;
+import java.util.HashSet;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-
+import jakarta.persistence.JoinColumn;
 
 @Entity
-@Table(name="usertable")
+@Table(name="app_user")
 public class AppUser {
 	
 	@Id
@@ -23,6 +29,13 @@ public class AppUser {
 	@Column(name="role", nullable=false)
 	private String role;
 	
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(
+			name="liked_recipes", 
+			joinColumns = @JoinColumn(name="appuser_id"), 
+			inverseJoinColumns = @JoinColumn(name="recipe_id"))
+	private Set<Recipe> likedRecipes;
+	
 	public AppUser() {}
 	
 	public AppUser(String username, String password, String role) {
@@ -30,6 +43,14 @@ public class AppUser {
 		this.username = username;
 		this.password = password;
 		this.role = role;
+	}
+	
+	public AppUser(String username, String password, String role, Set<Recipe> likedRecipes) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.likedRecipes = likedRecipes;
 	}
 
 	public Long getId() {
@@ -62,6 +83,19 @@ public class AppUser {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public Set<Recipe> getLikedRecipes() {
+		return likedRecipes;
+	}
+
+	public void setLikedRecipes(Set<Recipe> likedRecipes) {
+		this.likedRecipes = likedRecipes;
+	}
+
+	@Override
+	public String toString() {
+		return "AppUser [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
 	}
 	
 }

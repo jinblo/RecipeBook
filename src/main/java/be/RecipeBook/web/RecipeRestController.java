@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import be.RecipeBook.domain.AppUser;
+import be.RecipeBook.domain.AppUserRepository;
 import be.RecipeBook.domain.Recipe;
 import be.RecipeBook.domain.RecipeRepository;
 
@@ -21,6 +23,9 @@ public class RecipeRestController {
 	
 	@Autowired
 	RecipeRepository rRepository;
+	
+	@Autowired
+	AppUserRepository uRepository;
 	
 	@GetMapping("rest/recipes")
 	public @ResponseBody List<Recipe> recipeListRest() {
@@ -48,4 +53,8 @@ public class RecipeRestController {
 		rRepository.deleteById(id);
 	}
 	
+	@GetMapping("rest/user/{id}")
+	public Optional<AppUser> findUser(@PathVariable("id") Long id) {
+		return (uRepository.findById(id));
+	}
 }
