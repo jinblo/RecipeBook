@@ -100,7 +100,8 @@ public class RecipeController {
 	@PostMapping("addfavourite/{username}")
 	public String addFavourite(@PathVariable("username") String username, Recipe recipe) {
 		AppUser appUser = uRepository.findByUsername(username);
-		appUser.getLikedRecipes().add(recipe);
+		Recipe newRecipe = rRepository.findByNameIgnoreCase(recipe.getName());
+		appUser.getLikedRecipes().add(newRecipe);
 		uRepository.save(appUser);
 		return "favourites";
 	}
