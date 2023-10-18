@@ -18,17 +18,14 @@
 			</h6>
 		</form>
 		<h2 th:text="*{{name}}"></h2>
+		<p th:text="*{{category.name}}"></p>
+		<a th:href="@{~/recipelist}" class="btn btn-info">Recipes</a>
 		<form th:object="${recipe}"
 			th:action="@{/addfavourite/{username}(username=${#authentication.name})}"
 			method="post">
-			<input type="hidden" id="id" th:field="*{id}"> <input
-				type="hidden" id="name" th:field="*{name}"> <input
-				type="hidden" id="ingredients" th:field="*{ingredients}"> <input
-				type="hidden" id="instructions" th:field="*{instructions}">
-			<input type="text" id="category" th:field="*{category}"> <input
-				type="submit" value="Add to Favourites" class="btn btn-info" />
+			<input type="hidden" id="id" th:field="*{id}" /> 
+			<input type="submit" value="Add to Favourites" class="btn btn-info" />
 		</form>
-		<p th:text="*{{category.name}}"></p>
 		<h4>Ingredients</h4>
 		<p th:text="*{{ingredients}}"></p>
 		<h4>Instructions</h4>

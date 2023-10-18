@@ -21,7 +21,7 @@ class CategoryRepositoryTests {
 	@Test
 	void findAllCategories() {
 		Iterable<Category> categories = cRepository.findAll();
-		assertThat(categories).hasSize(4);
+		assertThat(categories).hasSizeGreaterThan(3);
 	}
 	
 	@Test

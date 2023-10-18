@@ -89,10 +89,10 @@ public class RecipeController {
 		return "recipe";
 	}
 	
-	@GetMapping("favourites/{id}")
-	public String showFavorites(@PathVariable("id") Long id, Model model) {
-		Optional<AppUser> appUser = uRepository.findById(id);
-		model.addAttribute("likedRecipes", appUser.get().getLikedRecipes());
+	@GetMapping("favourites/{username}")
+	public String showFavorites(@PathVariable("username") String username, Model model) {
+		AppUser appUser = uRepository.findByUsername(username);
+		model.addAttribute("likedRecipes", appUser.getLikedRecipes());
 		model.addAttribute("user", appUser);
 		return "favourites";
 	}
@@ -100,9 +100,18 @@ public class RecipeController {
 	@PostMapping("addfavourite/{username}")
 	public String addFavourite(@PathVariable("username") String username, Recipe recipe) {
 		AppUser appUser = uRepository.findByUsername(username);
-		Recipe newRecipe = rRepository.findByNameIgnoreCase(recipe.getName());
+		Recipe newRecipe = rRepository.findById(recipe.getId()).get();
 		appUser.getLikedRecipes().add(newRecipe);
 		uRepository.save(appUser);
-		return "favourites";
+		return "redirect:../favourites/{username}";
+	}
+	
+	@GetMapping("removefavourite/{username}/{id}")
+	public String removeFavourite(@PathVariable("username") String username, @PathVariable("id") Long id) {
+		AppUser appUser = uRepository.findByUsername(username);
+		Recipe recipe = rRepository.findById(id).get();
+		appUser.getLikedRecipes().remove(recipe);
+		uRepository.save(appUser);
+		return "redirect:../../favourites/{username}";
 	}
 }

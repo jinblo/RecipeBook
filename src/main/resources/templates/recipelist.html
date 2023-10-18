@@ -19,7 +19,7 @@
 			</h6>
 		</form>
 		<h1>Recipe Book</h1>
-		<a th:href="@{favourites/{id}(id=1)}" class="btn btn-info">Favourites</a>
+		<a th:href="@{/favourites/{username}(username=${#authentication.name})}" class="btn btn-info">Favourites</a>
 		<table class="table table-striped">
 			<tr>
 				<th>Recipe</th>

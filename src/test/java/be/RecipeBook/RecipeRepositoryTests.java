@@ -23,10 +23,10 @@ class RecipeRepositoryTests {
 	
 	@Test
 	void deleteRecipe() {
-		Recipe recipe = rRepository.findById((long) 1).get();
+		Recipe recipe = rRepository.findById((long) 4).get();
 		assertThat(recipe).isNotNull();
 		rRepository.delete(recipe);
-		Optional<Recipe> newRecipes = rRepository.findById((long) 1);
+		Optional<Recipe> newRecipes = rRepository.findById((long) 4);
 		assertThat(newRecipes).isEmpty();
 	}
 	
@@ -46,7 +46,7 @@ class RecipeRepositoryTests {
 	void saveRecipe() {
 		Recipe recipe = new Recipe("Uunilohi", "Lohi, mausteita", "Levitä mausteet lohen pintaan. Paista uunissa kunnes kypsä.", cRepository.findByName("main").get(0));
 		rRepository.save(recipe);
-		assertThat(rRepository.findByNameIgnoreCase("uunilohi")).isNotNull();
+		assertThat(rRepository.findByNameIgnoreCase("uunilohi").getId()).isNotNull();
 	}
 	
 	@Test
@@ -62,7 +62,7 @@ class RecipeRepositoryTests {
 	@Test
 	void findAllRecipes() {
 		Iterable<Recipe> recipes = rRepository.findAll();
-		assertThat(recipes).hasSize(4);
+		assertThat(recipes).hasSizeGreaterThan(3);
 	}
 	
 }

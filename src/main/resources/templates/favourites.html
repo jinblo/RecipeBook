@@ -19,16 +19,18 @@
 			</h6>
 		</form>
 		<h2>Favourite recipes</h2>
+		<a th:href="@{~/recipelist}" class="btn btn-info">Recipes</a>
 		<table class="table table-striped">
 			<tr>
 				<th>Recipe</th>
 				<th>Category</th>
-
+				<th></th>
 			</tr>
 			<tr th:each="recipe : ${likedRecipes}">
 				<td><a th:href="@{~/recipe/{id}(id=${recipe.id})}"><span
 						th:text="${recipe.name}"></span></a></td>
 				<td th:text="${recipe?.category?.name}?:''"></td>
+				<td><a th:href="@{~/removefavourite/{username}/{id}(username=${#authentication.name},id=${recipe.id})}" class="btn btn-warning">Remove from Favourites</a></td>
 			</tr>
 		</table>
 	</div>
